@@ -80,7 +80,6 @@ public class TimeChecker {
                         }
                     }
                     measureCheck.clear();
-                    wkAc.clear();
                 }
             }
 
@@ -91,8 +90,6 @@ public class TimeChecker {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                measureCheck.clear();
-                wkAc.clear();
             }
         });
     }
