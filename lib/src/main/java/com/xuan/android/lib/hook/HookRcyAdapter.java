@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class HookRcyAdapter extends RecyclerView.Adapter {
     private RecyclerView.Adapter hookAdapter;
     private Context context;
-    private HashMap<RecyclerView.ViewHolder, Long> time;
+    private HashMap<Integer, Long> time;
 
     public HookRcyAdapter(Context context, RecyclerView.Adapter hookAdapter) {
         this.context = context;
@@ -55,16 +55,15 @@ public class HookRcyAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         long startTime = System.currentTimeMillis();
-        if (time.get(viewHolder) != null) {
-            long lastBindTime = time.get(viewHolder);
+        if (time.get(i) != null) {
+            long lastBindTime = time.get(i);
             if ((startTime - lastBindTime) < CheckerConfig.RE_BIND_TIME) {
                 //重复绑定
                 TimeLogger.log(LoggerInfoBuilder.create(context, TimeInfo.STATE
                         .REBIND, viewHolder, i));
             }
-        } else {
-            time.put(viewHolder, startTime);
         }
+        time.put(i, startTime);
         TimeLogger.start(startTime);
         hookAdapter.onBindViewHolder(viewHolder, i);
         if (TimeLogger.check()) {

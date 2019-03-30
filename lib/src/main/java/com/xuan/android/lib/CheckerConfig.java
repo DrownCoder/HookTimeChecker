@@ -10,7 +10,7 @@ public class CheckerConfig {
     //检测开始时间
     public static final int START_TIME = 2000;
     //绑定时长
-    public static final long BIND_TIME = 6L;
+    public static final long BIND_TIME = 11L;
     //绘制时长
     public static final long DRAW_TIME = 16L;
     //重复刷新时间
