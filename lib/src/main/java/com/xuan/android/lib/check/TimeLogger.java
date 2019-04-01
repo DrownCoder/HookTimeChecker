@@ -50,3 +50,4 @@ public class TimeLogger {
         Log.d(TAG, info.logInfo);
     }
 }
+

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ListAdapter;
-import android.widget.Toast;
 
 import static com.xuan.android.lib.CheckerConfig.*;
 
@@ -73,7 +72,7 @@ public class LoggerInfoBuilder {
 
     public static StringBuilder createBaseInfo(Context context, TimeInfo.STATE state) {
         String tip = createReason(state);
-        Toast.makeText(context, TOAST, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, TOAST, Toast.LENGTH_SHORT).show();
         StringBuilder builder = new StringBuilder(100);
         builder.append("\n")
                 .append("页面信息：").append(context.getClass().getSimpleName()).append("\n")
@@ -81,3 +80,4 @@ public class LoggerInfoBuilder {
         return builder;
     }
 }
+

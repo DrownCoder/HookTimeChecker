@@ -14,3 +14,4 @@ public class TimeInfo {
 
     public String logInfo;
 }
+

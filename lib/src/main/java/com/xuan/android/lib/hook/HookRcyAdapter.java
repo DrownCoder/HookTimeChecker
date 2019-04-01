@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 
 import com.xuan.android.lib.CheckerConfig;
+import com.xuan.android.lib.TimeChecker;
 import com.xuan.android.lib.check.LoggerInfoBuilder;
 import com.xuan.android.lib.check.TimeInfo;
 import com.xuan.android.lib.check.TimeLogger;
@@ -22,12 +23,12 @@ import java.util.HashMap;
 public class HookRcyAdapter extends RecyclerView.Adapter {
     private RecyclerView.Adapter hookAdapter;
     private Context context;
-    private HashMap<Integer, Long> time;
+    private HashMap<Integer, Long> reBindError;
 
     public HookRcyAdapter(Context context, RecyclerView.Adapter hookAdapter) {
         this.context = context;
         this.hookAdapter = hookAdapter;
-        time = new HashMap<>();
+        reBindError = new HashMap<>();
     }
 
     @Override
@@ -49,21 +50,22 @@ public class HookRcyAdapter extends RecyclerView.Adapter {
             TimeLogger.log(LoggerInfoBuilder.create(context, TimeInfo.STATE
                     .CREATE, holder, i));
         }
+        TimeChecker.getInstance().putMeasureTest(holder.getClass(), holder);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         long startTime = System.currentTimeMillis();
-        if (time.get(i) != null) {
-            long lastBindTime = time.get(i);
+        if (reBindError.get(i) != null) {
+            long lastBindTime = reBindError.get(i);
             if ((startTime - lastBindTime) < CheckerConfig.RE_BIND_TIME) {
                 //重复绑定
                 TimeLogger.log(LoggerInfoBuilder.create(context, TimeInfo.STATE
                         .REBIND, viewHolder, i));
             }
         }
-        time.put(i, startTime);
+        reBindError.put(i, startTime);
         TimeLogger.start(startTime);
         hookAdapter.onBindViewHolder(viewHolder, i);
         if (TimeLogger.check()) {
@@ -80,12 +82,12 @@ public class HookRcyAdapter extends RecyclerView.Adapter {
     @Override
     public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
         hookAdapter.onViewDetachedFromWindow(holder);
-        time.remove(holder);
+        reBindError.remove(holder);
     }
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         hookAdapter.onViewRecycled(holder);
-        time.remove(holder);
+        reBindError.remove(holder);
     }
 }
